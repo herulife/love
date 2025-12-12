@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Untuk Ratna, Cintaku Heru</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        /* --- GAYA UMUM & RESET --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #000;
+            color: #fff;
+            overflow: hidden;
+            cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="font-size: 20px;"><text y="20">✨</text></svg>'), auto;
+        }
+
+        /* --- LAYAR PEMBUKA --- */
+        #intro-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(ellipse at center, #0d1d31 0%, #0c0d13 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            z-index: 1000;
+            transition: opacity 2s ease-out, visibility 2s ease-out;
+        }
+
+        #intro-screen.hidden {
+            opacity: 0;
+            visibility: hidden;
+        }
+
+        .intro-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 5vw;
+            color: #fff;
+            margin-bottom: 20px;
+            opacity: 0;
+            animation: fadeInScale 2s 0.5s forwards;
+        }
+
+        .intro-subtitle {
+            font-size: 1.5em;
+            font-weight: 300;
+            margin-bottom: 40px;
+            opacity: 0;
+            animation: fadeInScale 2s 1s forwards;
+        }
+
+        #explore-btn {
+            padding: 15px 40px;
+            font-size: 1.2em;
+            background: none;
+            color: #fff;
+            border: 2px solid #fff;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s ease;
+            opacity: 0;
+            animation: fadeInScale 2s 1.5s forwards, pulse 2s infinite;
+        }
+
+        #explore-btn:hover {
+            background-color: #fff;
+            color: #0d1d31;
+            transform: scale(1.05);
+        }
+
+        @keyframes fadeInScale {
+            to { opacity: 1; transform: scale(1); }
+            from { opacity: 0; transform: scale(0.9); }
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
+            50% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+        }
+
+        /* --- KANVAS PARTIKEL --- */
+        #particles-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        /* --- KONTEN UTAMA (PETA MEMORI) --- */
+        #main-content {
+            position: relative;
+            width: 100%;
+            height: 100vh;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2;
+        }
+
+        .memory-map-title {
+            position: absolute;
+            top: 5%;
+            font-family: 'Dancing Script', cursive;
+            font-size: 2.5em;
+            color: rgba(255, 255, 255, 0.8);
+            text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+        }
+
+        /* --- TOMBOL KEJUTAN --- */
+        .surprise-point {
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 70%);
+            border-radius: 50%;
+            cursor: pointer;
+            animation: twinkle 3s infinite ease-in-out;
+            transition: transform 0.3s ease;
+        }
+        .surprise-point:hover {
+            transform: scale(1.5);
+        }
+        .surprise-point.found {
+            background: radial-gradient(circle, rgba(255,105,180,1) 0%, rgba(255,105,180,0) 70%);
+            animation: none;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; transform: scale(0.8); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+
+        /* --- MODAL POPUP --- */
+        .modal {
+            display: none; 
+            position: fixed; 
+            z-index: 1001; 
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.7);
+            backdrop-filter: blur(5px);
+            animation: fadeIn 0.5s;
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
+            margin: 10% auto;
+            padding: 30px;
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 20px;
+            width: 80%;
+            max-width: 600px;
+            text-align: center;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.5);
+            animation: slideIn 0.5s;
+        }
+
+        .modal-content img {
+            max-width: 80%;
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .modal-content p {
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .modal-quote {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2em;
+            color: #ff69b4;
+            margin-bottom: 15px;
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+
+        .close:hover {
+            color: #fff;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideIn { from { transform: translateY(-50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+        /* --- PROGRESS HATI --- */
+        #heart-progress {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 10;
+        }
+
+        .heart-icon {
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.2);
+            transition: color 0.5s ease, transform 0.5s ease;
+        }
+
+        .heart-icon.filled {
+            color: #ff69b4;
+            animation: heartPop 0.6s ease;
+        }
+
+        @keyframes heartPop {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.3); }
+            100% { transform: scale(1); }
+        }
+
+        /* --- GRAND FINALE --- */
+        #finale-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            background: radial-gradient(ellipse at center, #2a0845 0%, #000 100%);
+            z-index: 1002;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px;
+            animation: fadeIn 1.5s;
+        }
+
+        .finale-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: 4em;
+            color: #fff;
+            margin-bottom: 20px;
+        }
+
+        .finale-letter {
+            max-width: 800px;
+            font-size: 1.2em;
+            line-height: 1.8;
+            margin-bottom: 30px;
+        }
+
+        .finale-signature {
+            font-family: 'Dancing Script', cursive;
+            font-size: 2em;
+            font-weight: 700;
+        }
+
+        /* --- KONTROL MUSIK --- */
+        #music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            font-size: 28px;
+            cursor: pointer;
+            z-index: 1003;
+            transition: all 0.3s ease;
+            color: #fff;
+        }
+
+        #music-control:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+
+        /* --- VOLUME SLIDER --- */
+        #volume-slider {
+            position: fixed;
+            bottom: 100px;
+            right: 30px;
+            width: 60px;
+            height: 120px;
+            z-index: 1003;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 15px 0;
+        }
+
+        #volume-slider.show {
+            display: flex;
+        }
+
+        #volume-slider input {
+            width: 80px;
+            height: 5px;
+            transform: rotate(-90deg);
+            margin: 40px 0;
+            -webkit-appearance: none;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 5px;
+            outline: none;
+        }
+
+        #volume-slider input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: #fff;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- LAYAR PEMBUKA -->
+    <section id="intro-screen">
+        <h1 class="intro-title">Sebuah Pesan Khusus</h1>
+        <p class="intro-subtitle">Untuk Ratna Yestina, dari Heru Fidiyanto</p>
+        <button id="explore-btn">Jelajahi Kenangan Kita</button>
+    </section>
+
+    <!-- KANVAS PARTIKEL -->
+    <canvas id="particles-canvas"></canvas>
+
+    <!-- KONTEN UTAMA -->
+    <main id="main-content">
+        <h2 class="memory-map-title">Temukan Kilasan Cinta Kita ✨</h2>
+        <!-- Tombol Kejutan akan di-generate oleh JS -->
+    </main>
+
+    <!-- PROGRESS HATI -->
+    <div id="heart-progress">
+        <!-- Ikon hati akan di-generate oleh JS -->
+    </div>
+
+    <!-- Modal Popup (Kosong, akan diisi oleh JS) -->
+    <div id="surprise-modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modal-body"></div>
+        </div>
+    </div>
+
+    <!-- GRAND FINALE SCREEN -->
+    <section id="finale-screen">
+        <h1 class="finale-title">Selamat Ulang Tahun Pernikahan, Sayangku</h1>
+        <div class="finale-letter">
+            <p>Ratna Yestina,</p>
+            <p>Terima kasih sudah menjadi bagian dari hidupku selama ini. Setiap detik, setiap tawa, dan setiap air mata yang kita lalui bersama telah melukis sebuah mahakarya indah yang bernama 'kita'.</p>
+            <p>Dari 12 Desember 2008 hingga hari ini, cintaku padamu tak pernah pudar, justru terus bertumbuh lebih dalam. Kamu adalah rumahku, pelarianku, dan doa yang selalu kuminta.</p>
+            <p>Aku mencintaimu, lebih dari kata-kata yang bisa ungkapkan.</p>
+        </div>
+        <p class="finale-signature">Abi Heru Fidiyanto</p>
+    </section>
+
+    <!-- KONTROL MUSIK -->
+    <button id="music-control">🎵</button>
+    <div id="volume-slider">
+        <input type="range" id="volume-control" min="0" max="1" step="0.1" value="0.5">
+    </div>
+    
+    <!-- ELEMEN AUDIO DENGAN MULTIPLE SOURCE -->
+    <audio id="background-music" loop preload="auto">
+        <!-- Prioritas 1: File lokal -->
+        <source src="image/Letto.mp3" type="audio/mpeg">
+
+        Browser Anda tidak mendukung elemen audio.
+    </audio>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // --- ELEMEN & VARIABEL ---
+            const introScreen = document.getElementById('intro-screen');
+            const mainContent = document.getElementById('main-content');
+            const exploreBtn = document.getElementById('explore-btn');
+            const modal = document.getElementById('surprise-modal');
+            const modalBody = document.getElementById('modal-body');
+            const closeModalBtn = document.querySelector('.close');
+            const heartProgress = document.getElementById('heart-progress');
+            const finaleScreen = document.getElementById('finale-screen');
+            const musicControl = document.getElementById('music-control');
+            const volumeSlider = document.getElementById('volume-slider');
+            const volumeControl = document.getElementById('volume-control');
+            const backgroundMusic = document.getElementById('background-music');
+
+            const canvas = document.getElementById('particles-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+
+            let isMusicPlaying = false;
+            let foundSurprises = 0;
+            const totalSurprises = 5;
+
+            // --- DATA KEJUTAN ---
+            const surprises = [
+                { id: 1, top: '20%', left: '15%', type: 'image', src: 'image/ummi2.jpg', caption: 'Awal dari segalanya. Senyum yang mengubah dunianku.' },
+                { id: 2, top: '40%', left: '70%', type: 'quote', quote: '"Cinta tidak terlihat dengan mata, tetapi dengan hati."', message: '- Helen Keller -' },
+                { id: 3, top: '70%', left: '30%', type: 'image', src: 'image/dlas.jpg', caption: 'Melangkah bersama, menghadapi dunia.' },
+                { id: 4, top: '30%', left: '45%', type: 'image', src:'image/abi-ummi.jpeg',caption: 'Terima kasih sudah menjadi sahabat terbaik dan partner dalam kebaikan...' },
+                { id: 5, top: '60%', left: '80%', type: 'image', src: 'image/ummi1.png', caption: 'Dan sampai kini, kamulah rumahku.' }
+            ];
+
+            // --- SISTEM PARTIKEL ---
+            class Particle {
+                constructor() {
+                    this.x = Math.random() * canvas.width;
+                    this.y = Math.random() * canvas.height;
+                    this.size = Math.random() * 2 + 0.5;
+                    this.speedX = Math.random() * 0.5 - 0.25;
+                    this.speedY = Math.random() * 1 + 0.5;
+                    this.opacity = Math.random() * 0.5 + 0.5;
+                }
+                update() { 
+                    this.y += this.speedY; 
+                    this.x += this.speedX; 
+                    if (this.y > canvas.height) { 
+                        this.y = 0; 
+                        this.x = Math.random() * canvas.width; 
+                    } 
+                }
+                draw() { 
+                    ctx.fillStyle = `rgba(255, 255, 255, ${this.opacity})`; 
+                    ctx.beginPath(); 
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2); 
+                    ctx.fill(); 
+                }
+            }
+            
+            const particlesArray = []; 
+            for (let i = 0; i < 200; i++) particlesArray.push(new Particle());
+            
+            function animateParticles() { 
+                ctx.clearRect(0, 0, canvas.width, canvas.height); 
+                particlesArray.forEach(p => { p.update(); p.draw(); }); 
+                requestAnimationFrame(animateParticles); 
+            }
+            animateParticles();
+            
+            window.addEventListener('resize', () => { 
+                canvas.width = window.innerWidth; 
+                canvas.height = window.innerHeight; 
+            });
+
+            // --- FUNGSI-FUNGSI ---
+            function createSurprisePoints() {
+                surprises.forEach(s => {
+                    const point = document.createElement('div');
+                    point.className = 'surprise-point';
+                    point.dataset.id = s.id;
+                    point.style.top = s.top;
+                    point.style.left = s.left;
+                    point.addEventListener('click', () => openModal(s));
+                    mainContent.appendChild(point);
+                });
+            }
+
+            function createHeartProgress() {
+                for (let i = 0; i < totalSurprises; i++) {
+                    const heart = document.createElement('span');
+                    heart.className = 'heart-icon';
+                    heart.textContent = '❤️';
+                    heartProgress.appendChild(heart);
+                }
+            }
+
+            function updateHeartProgress() {
+                const hearts = document.querySelectorAll('.heart-icon');
+                if (foundSurprises <= hearts.length) {
+                    hearts[foundSurprises - 1].classList.add('filled');
+                }
+                if (foundSurprises === totalSurprises) {
+                    setTimeout(showFinale, 1000);
+                }
+            }
+
+            function openModal(data) {
+                const point = document.querySelector(`.surprise-point[data-id="${data.id}"]`);
+                if (point.classList.contains('found')) return;
+
+                point.classList.add('found');
+                foundSurprises++;
+                updateHeartProgress();
+
+                let content = '';
+                if (data.type === 'image') {
+                    content = `<img src="${data.src}" alt="Memory ${data.id}"><p>${data.caption}</p>`;
+                } else if (data.type === 'quote') {
+                    content = `<p class="modal-quote">${data.quote}</p><p>${data.message}</p>`;
+                } else if (data.type === 'message') {
+                    content = `<p>${data.message}</p>`;
+                }
+                modalBody.innerHTML = content;
+                modal.style.display = 'block';
+                
+                // Play a gentle sound when opening a memory
+                const memorySound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-happy-crowd-laugh-464.mp3');
+                memorySound.volume = 0.3;
+                memorySound.play().catch(e => console.log("Memory sound autoplay prevented."));
+            }
+
+            function showFinale() {
+                finaleScreen.style.display = 'flex';
+                
+                // Play celebration sound
+                const celebrationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
+                celebrationSound.volume = 0.5;
+                celebrationSound.play().catch(e => console.log("Celebration sound autoplay prevented."));
+                
+                // Optional: Change music for finale (uncomment if you have a special finale song)
+                // backgroundMusic.src = 'lagu_finale.mp3';
+                // backgroundMusic.play();
+            }
+
+            // --- MUSIC FUNCTIONS ---
+            function setupAudio() {
+                // Set initial volume
+                backgroundMusic.volume = volumeControl.value;
+                
+                // Event untuk update volume
+                volumeControl.addEventListener('input', () => {
+                    backgroundMusic.volume = volumeControl.value;
+                });
+                
+                // Coba play musik dengan volume rendah untuk menghindari autoplay block
+                backgroundMusic.volume = 0.1;
+                
+                // Simpan preferensi volume ke localStorage
+                const savedVolume = localStorage.getItem('anniversaryVolume');
+                if (savedVolume) {
+                    backgroundMusic.volume = savedVolume;
+                    volumeControl.value = savedVolume;
+                }
+                
+                // Simpan volume saat berubah
+                volumeControl.addEventListener('change', () => {
+                    localStorage.setItem('anniversaryVolume', volumeControl.value);
+                });
+            }
+
+            // --- EVENT LISTENER ---
+            exploreBtn.addEventListener('click', () => {
+                introScreen.classList.add('hidden');
+                setTimeout(() => {
+                    introScreen.style.display = 'none';
+                    mainContent.style.display = 'flex';
+                    createSurprisePoints();
+                    createHeartProgress();
+                    
+                    // Coba play musik dengan user interaction
+                    const playPromise = backgroundMusic.play();
+                    if (playPromise !== undefined) {
+                        playPromise.then(() => {
+                            isMusicPlaying = true;
+                            musicControl.textContent = '❚❚';
+                            backgroundMusic.volume = volumeControl.value;
+                        }).catch(e => {
+                            console.log("Autoplay prevented. User needs to interact first.");
+                            musicControl.textContent = '▶️';
+                        });
+                    }
+                }, 2000);
+            });
+
+            closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
+            window.addEventListener('click', (e) => { if (e.target == modal) modal.style.display = 'none'; });
+
+            // Music control with volume slider
+            let volumeSliderVisible = false;
+            
+            musicControl.addEventListener('click', (e) => {
+                e.stopPropagation();
+                
+                if (isMusicPlaying) { 
+                    backgroundMusic.pause(); 
+                    musicControl.textContent = '🎵';
+                } else { 
+                    backgroundMusic.play().then(() => {
+                        musicControl.textContent = '❚❚';
+                    }).catch(err => {
+                        console.log("Play failed:", err);
+                        alert("Klik tombol 'Jelajahi Kenangan Kita' terlebih dahulu untuk memulai musik.");
+                    });
+                }
+                isMusicPlaying = !isMusicPlaying;
+            });
+
+            // Toggle volume slider
+            musicControl.addEventListener('contextmenu', (e) => {
+                e.preventDefault();
+                volumeSliderVisible = !volumeSliderVisible;
+                volumeSlider.classList.toggle('show', volumeSliderVisible);
+            });
+
+            // Hide volume slider when clicking elsewhere
+            document.addEventListener('click', (e) => {
+                if (!musicControl.contains(e.target) && !volumeSlider.contains(e.target)) {
+                    volumeSliderVisible = false;
+                    volumeSlider.classList.remove('show');
+                }
+            });
+
+            // Setup audio on load
+            setupAudio();
+            
+            // Preload music gently
+            setTimeout(() => {
+                backgroundMusic.load();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>
