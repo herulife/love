@@ -271,10 +271,70 @@
             animation: heartPop 0.6s ease;
         }
 
+        /* ANIMASI KHUSUS UNTUK HATI TERAKHIR */
+        .heart-icon.special-pulse {
+            animation: heartSpecialPulse 0.8s ease-in-out 5 !important;
+        }
+
         @keyframes heartPop {
             0% { transform: scale(1); }
             50% { transform: scale(1.3); }
             100% { transform: scale(1); }
+        }
+
+        @keyframes heartSpecialPulse {
+            0%, 100% { transform: scale(1); color: #ff69b4; }
+            25% { transform: scale(1.5); color: #ff1493; }
+            50% { transform: scale(1.2); color: #ff69b4; }
+            75% { transform: scale(1.4); color: #ff1493; }
+        }
+
+        /* --- LAYAR TRANSISI SETELAH HATI PENUH --- */
+        #transition-screen {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            min-height: -webkit-fill-available;
+            background: radial-gradient(ellipse at center, rgba(138, 43, 226, 0.9) 0%, rgba(0, 0, 0, 0.95) 100%);
+            z-index: 1001;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: min(5vw, 40px);
+            animation: fadeIn 1s;
+            overflow-y: auto;
+        }
+
+        .transition-title {
+            font-family: 'Dancing Script', cursive;
+            font-size: clamp(2.5rem, 8vw, 4em);
+            color: #fff;
+            margin-bottom: 20px;
+            line-height: 1.2;
+            padding: 0 15px;
+            text-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        .transition-subtitle {
+            font-size: clamp(1.2rem, 4vw, 1.8em);
+            color: #ffd700;
+            margin-bottom: 30px;
+            opacity: 0;
+            animation: fadeIn 1s 0.5s forwards;
+        }
+
+        .transition-countdown {
+            font-size: clamp(1.5rem, 5vw, 2.5em);
+            font-weight: bold;
+            color: #ff69b4;
+            margin-top: 20px;
+            font-family: 'Dancing Script', cursive;
+            opacity: 0;
+            animation: fadeIn 1s 1s forwards;
         }
 
         /* --- GRAND FINALE --- */
@@ -409,6 +469,10 @@
             #heart-progress {
                 bottom: 15px;
             }
+            
+            .transition-title {
+                font-size: 2.5rem;
+            }
         }
 
         @media (max-width: 480px) {
@@ -435,6 +499,14 @@
                 margin: 20% auto;
                 padding: 15px;
                 border-radius: 15px;
+            }
+            
+            .transition-title {
+                font-size: 2rem;
+            }
+            
+            .transition-subtitle {
+                font-size: 1.2rem;
             }
             
             .finale-title {
@@ -471,6 +543,11 @@
             .memory-map-title {
                 top: 10%;
                 font-size: 1.5rem;
+            }
+            
+            .transition-title {
+                font-size: 2rem;
+                margin-bottom: 15px;
             }
             
             .finale-title {
@@ -572,6 +649,14 @@
         <!-- Ikon hati akan di-generate oleh JS -->
     </div>
 
+    <!-- LAYAR TRANSISI SETELAH HATI PENUH -->
+    <section id="transition-screen">
+        <h1 class="transition-title">Selamat! 🎉</h1>
+        <p class="transition-subtitle">Kamu telah menemukan semua kenangan indah kita!</p>
+        <p class="transition-subtitle">Persembahan spesial untukmu akan dimulai dalam...</p>
+        <div class="transition-countdown" id="countdown">5</div>
+    </section>
+
     <!-- Modal Popup (Kosong, akan diisi oleh JS) -->
     <div id="surprise-modal" class="modal">
         <div class="modal-content">
@@ -616,6 +701,8 @@
             const modalBody = document.getElementById('modal-body');
             const closeModalBtn = document.querySelector('.close');
             const heartProgress = document.getElementById('heart-progress');
+            const transitionScreen = document.getElementById('transition-screen');
+            const countdownElement = document.getElementById('countdown');
             const finaleScreen = document.getElementById('finale-screen');
             const musicControl = document.getElementById('music-control');
             const volumeSlider = document.getElementById('volume-slider');
@@ -855,9 +942,52 @@
                 if (foundSurprises <= hearts.length) {
                     hearts[foundSurprises - 1].classList.add('filled');
                 }
+                
+                // Ketika semua hati terisi
                 if (foundSurprises === totalSurprises) {
-                    setTimeout(showFinale, 3000);
+                    // Tambahkan animasi khusus untuk hati terakhir
+                    hearts[totalSurprises - 1].classList.add('special-pulse');
+                    
+                    // Mainkan suara konfeti
+                    try {
+                        const celebrationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-party-horn-sound-2927.mp3');
+                        celebrationSound.volume = 0.3;
+                        celebrationSound.play().catch(e => console.log("Celebration sound autoplay prevented."));
+                    } catch (error) {
+                        console.log("Error playing celebration sound:", error);
+                    }
+                    
+                    // Tampilkan layar transisi setelah 1 detik
+                    setTimeout(() => {
+                        showTransitionScreen();
+                    }, 1000);
                 }
+            }
+
+            function showTransitionScreen() {
+                transitionScreen.style.display = 'flex';
+                
+                // Countdown 5 detik
+                let countdown = 5;
+                countdownElement.textContent = countdown;
+                
+                const countdownInterval = setInterval(() => {
+                    countdown--;
+                    countdownElement.textContent = countdown;
+                    
+                    // Efek visual countdown
+                    countdownElement.style.transform = 'scale(1.2)';
+                    setTimeout(() => {
+                        countdownElement.style.transform = 'scale(1)';
+                    }, 200);
+                    
+                    if (countdown <= 0) {
+                        clearInterval(countdownInterval);
+                        // Sembunyikan layar transisi dan tampilkan finale
+                        transitionScreen.style.display = 'none';
+                        showFinale();
+                    }
+                }, 1000);
             }
 
             function openModal(data) {
@@ -894,13 +1024,13 @@
             function showFinale() {
                 finaleScreen.style.display = 'flex';
                 
-                // Play celebration sound
+                // Play final celebration sound
                 try {
-                    const celebrationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
-                    celebrationSound.volume = 0.5;
-                    celebrationSound.play().catch(e => console.log("Celebration sound autoplay prevented."));
+                    const finalSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
+                    finalSound.volume = 0.5;
+                    finalSound.play().catch(e => console.log("Final sound autoplay prevented."));
                 } catch (error) {
-                    console.log("Error playing celebration sound:", error);
+                    console.log("Error playing final sound:", error);
                 }
             }
 
