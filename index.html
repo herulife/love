@@ -2,7 +2,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Untuk Ratna, Cintaku Heru</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -13,14 +13,23 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            overflow: hidden;
+            height: 100%;
         }
 
         body {
             font-family: 'Poppins', sans-serif;
             background: #000;
             color: #fff;
-            overflow: hidden;
+            overflow-x: hidden;
+            overflow-y: auto;
+            height: 100%;
             cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" style="font-size: 20px;"><text y="20">✨</text></svg>'), auto;
+            touch-action: manipulation;
         }
 
         /* --- LAYAR PEMBUKA --- */
@@ -30,6 +39,7 @@
             left: 0;
             width: 100%;
             height: 100vh;
+            min-height: -webkit-fill-available;
             background: radial-gradient(ellipse at center, #0d1d31 0%, #0c0d13 100%);
             display: flex;
             flex-direction: column;
@@ -38,6 +48,7 @@
             text-align: center;
             z-index: 1000;
             transition: opacity 2s ease-out, visibility 2s ease-out;
+            padding: 20px;
         }
 
         #intro-screen.hidden {
@@ -47,24 +58,27 @@
 
         .intro-title {
             font-family: 'Dancing Script', cursive;
-            font-size: 5vw;
+            font-size: clamp(2.5rem, 8vw, 5rem);
             color: #fff;
             margin-bottom: 20px;
             opacity: 0;
             animation: fadeInScale 2s 0.5s forwards;
+            line-height: 1.2;
+            padding: 0 15px;
         }
 
         .intro-subtitle {
-            font-size: 1.5em;
+            font-size: clamp(1rem, 4vw, 1.5rem);
             font-weight: 300;
             margin-bottom: 40px;
             opacity: 0;
             animation: fadeInScale 2s 1s forwards;
+            padding: 0 20px;
         }
 
         #explore-btn {
-            padding: 15px 40px;
-            font-size: 1.2em;
+            padding: min(4vw, 15px) min(8vw, 40px);
+            font-size: clamp(1rem, 4vw, 1.2rem);
             background: none;
             color: #fff;
             border: 2px solid #fff;
@@ -73,9 +87,10 @@
             transition: all 0.4s ease;
             opacity: 0;
             animation: fadeInScale 2s 1.5s forwards, pulse 2s infinite;
+            min-height: 50px;
         }
 
-        #explore-btn:hover {
+        #explore-btn:hover, #explore-btn:active {
             background-color: #fff;
             color: #0d1d31;
             transform: scale(1.05);
@@ -85,9 +100,10 @@
             to { opacity: 1; transform: scale(1); }
             from { opacity: 0; transform: scale(0.9); }
         }
+        
         @keyframes pulse {
             0%, 100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.7); }
-            50% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+            50% { box-shadow: 0 0 0 min(3vw, 15px) rgba(255, 255, 255, 0); }
         }
 
         /* --- KANVAS PARTIKEL --- */
@@ -105,35 +121,45 @@
             position: relative;
             width: 100%;
             height: 100vh;
+            min-height: -webkit-fill-available;
             display: none;
             justify-content: center;
             align-items: center;
             z-index: 2;
+            overflow: hidden;
         }
 
         .memory-map-title {
             position: absolute;
-            top: 5%;
+            top: max(5%, 20px);
             font-family: 'Dancing Script', cursive;
-            font-size: 2.5em;
+            font-size: clamp(1.5rem, 6vw, 2.5rem);
             color: rgba(255, 255, 255, 0.8);
             text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+            text-align: center;
+            width: 90%;
+            padding: 0 10px;
         }
 
         /* --- TOMBOL KEJUTAN --- */
         .surprise-point {
             position: absolute;
-            width: 40px;
-            height: 40px;
+            width: min(10vw, 40px);
+            height: min(10vw, 40px);
+            min-width: 30px;
+            min-height: 30px;
             background: radial-gradient(circle, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 70%);
             border-radius: 50%;
             cursor: pointer;
             animation: twinkle 3s infinite ease-in-out;
             transition: transform 0.3s ease;
+            z-index: 3;
         }
-        .surprise-point:hover {
+        
+        .surprise-point:hover, .surprise-point:active {
             transform: scale(1.5);
         }
+        
         .surprise-point.found {
             background: radial-gradient(circle, rgba(255,105,180,1) 0%, rgba(255,105,180,0) 70%);
             animation: none;
@@ -157,49 +183,63 @@
             background-color: rgba(0,0,0,0.7);
             backdrop-filter: blur(5px);
             animation: fadeIn 0.5s;
+            padding: 20px;
         }
 
         .modal-content {
             background: linear-gradient(135deg, rgba(255,255,255,0.1), rgba(255,255,255,0.05));
             margin: 10% auto;
-            padding: 30px;
+            padding: min(4vw, 30px);
             border: 1px solid rgba(255,255,255,0.2);
             border-radius: 20px;
-            width: 80%;
+            width: 90%;
             max-width: 600px;
+            max-height: 80vh;
+            overflow-y: auto;
             text-align: center;
             box-shadow: 0 15px 35px rgba(0,0,0,0.5);
             animation: slideIn 0.5s;
         }
 
         .modal-content img {
-            max-width: 80%;
+            max-width: 100%;
+            height: auto;
             border-radius: 15px;
             margin-bottom: 20px;
         }
 
         .modal-content p {
-            font-size: 1.1em;
+            font-size: clamp(1rem, 3.5vw, 1.1em);
             line-height: 1.6;
+            word-wrap: break-word;
+            padding: 0 10px;
         }
 
         .modal-quote {
             font-family: 'Dancing Script', cursive;
-            font-size: 2em;
+            font-size: clamp(1.5rem, 5vw, 2em);
             color: #ff69b4;
             margin-bottom: 15px;
+            padding: 0 10px;
         }
 
         .close {
             color: #aaa;
-            float: right;
-            font-size: 28px;
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: clamp(24px, 6vw, 28px);
             font-weight: bold;
             cursor: pointer;
             transition: color 0.3s;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .close:hover {
+        .close:hover, .close:active {
             color: #fff;
         }
 
@@ -209,16 +249,19 @@
         /* --- PROGRESS HATI --- */
         #heart-progress {
             position: fixed;
-            bottom: 30px;
+            bottom: max(5vw, 20px);
             left: 50%;
             transform: translateX(-50%);
             display: flex;
-            gap: 10px;
+            gap: min(2vw, 10px);
             z-index: 10;
+            flex-wrap: wrap;
+            justify-content: center;
+            max-width: 90%;
         }
 
         .heart-icon {
-            font-size: 24px;
+            font-size: clamp(20px, 5vw, 24px);
             color: rgba(255, 255, 255, 0.2);
             transition: color 0.5s ease, transform 0.5s ease;
         }
@@ -242,55 +285,65 @@
             left: 0;
             width: 100%;
             height: 100vh;
+            min-height: -webkit-fill-available;
             background: radial-gradient(ellipse at center, #2a0845 0%, #000 100%);
             z-index: 1002;
             flex-direction: column;
             justify-content: center;
             align-items: center;
             text-align: center;
-            padding: 40px;
+            padding: min(5vw, 40px);
             animation: fadeIn 1.5s;
+            overflow-y: auto;
         }
 
         .finale-title {
             font-family: 'Dancing Script', cursive;
-            font-size: 4em;
+            font-size: clamp(2rem, 8vw, 4em);
             color: #fff;
             margin-bottom: 20px;
+            line-height: 1.2;
+            padding: 0 15px;
         }
 
         .finale-letter {
             max-width: 800px;
-            font-size: 1.2em;
+            font-size: clamp(1rem, 3.5vw, 1.2em);
             line-height: 1.8;
             margin-bottom: 30px;
+            padding: 0 15px;
         }
 
         .finale-signature {
             font-family: 'Dancing Script', cursive;
-            font-size: 2em;
+            font-size: clamp(1.5rem, 5vw, 2em);
             font-weight: 700;
         }
 
         /* --- KONTROL MUSIK --- */
         #music-control {
             position: fixed;
-            bottom: 30px;
-            right: 30px;
+            bottom: max(5vw, 20px);
+            right: max(5vw, 20px);
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.2);
             border-radius: 50%;
-            width: 60px;
-            height: 60px;
-            font-size: 28px;
+            width: min(15vw, 60px);
+            height: min(15vw, 60px);
+            min-width: 50px;
+            min-height: 50px;
+            font-size: clamp(20px, 5vw, 28px);
             cursor: pointer;
             z-index: 1003;
             transition: all 0.3s ease;
             color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        #music-control:hover {
+        #music-control:hover, #music-control:active {
             background: rgba(255, 255, 255, 0.2);
             transform: scale(1.1);
         }
@@ -298,10 +351,10 @@
         /* --- VOLUME SLIDER --- */
         #volume-slider {
             position: fixed;
-            bottom: 100px;
-            right: 30px;
-            width: 60px;
-            height: 120px;
+            bottom: calc(min(15vw, 60px) + max(5vw, 20px) + 10px);
+            right: max(5vw, 20px);
+            width: min(15vw, 60px);
+            height: min(30vw, 120px);
             z-index: 1003;
             display: none;
             flex-direction: column;
@@ -309,8 +362,8 @@
             background: rgba(255, 255, 255, 0.1);
             backdrop-filter: blur(5px);
             border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 30px;
-            padding: 15px 0;
+            border-radius: min(7.5vw, 30px);
+            padding: min(3vw, 15px) 0;
         }
 
         #volume-slider.show {
@@ -318,10 +371,10 @@
         }
 
         #volume-slider input {
-            width: 80px;
+            width: min(20vw, 80px);
             height: 5px;
             transform: rotate(-90deg);
-            margin: 40px 0;
+            margin: min(10vw, 40px) 0;
             -webkit-appearance: none;
             background: rgba(255, 255, 255, 0.2);
             border-radius: 5px;
@@ -330,11 +383,169 @@
 
         #volume-slider input::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 20px;
-            height: 20px;
+            width: min(5vw, 20px);
+            height: min(5vw, 20px);
             border-radius: 50%;
             background: #fff;
             cursor: pointer;
+        }
+
+        /* --- MEDIA QUERIES UNTUK RESPONSIF --- */
+        @media (max-width: 768px) {
+            .surprise-point {
+                width: 35px;
+                height: 35px;
+            }
+            
+            .memory-map-title {
+                top: 15%;
+            }
+            
+            .modal-content {
+                margin: 15% auto;
+                padding: 20px;
+            }
+            
+            #heart-progress {
+                bottom: 15px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .intro-title {
+                font-size: 2.2rem;
+            }
+            
+            .intro-subtitle {
+                font-size: 1rem;
+                margin-bottom: 30px;
+            }
+            
+            #explore-btn {
+                padding: 12px 30px;
+                font-size: 1rem;
+            }
+            
+            .surprise-point {
+                width: 30px;
+                height: 30px;
+            }
+            
+            .modal-content {
+                margin: 20% auto;
+                padding: 15px;
+                border-radius: 15px;
+            }
+            
+            .finale-title {
+                font-size: 2rem;
+            }
+            
+            .finale-letter {
+                font-size: 1rem;
+            }
+            
+            #music-control {
+                width: 50px;
+                height: 50px;
+                font-size: 20px;
+            }
+            
+            #volume-slider {
+                bottom: 80px;
+                right: 20px;
+            }
+        }
+
+        @media (max-height: 600px) {
+            .intro-title {
+                font-size: 2rem;
+                margin-bottom: 15px;
+            }
+            
+            .intro-subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 25px;
+            }
+            
+            .memory-map-title {
+                top: 10%;
+                font-size: 1.5rem;
+            }
+            
+            .finale-title {
+                font-size: 2rem;
+                margin-bottom: 15px;
+            }
+            
+            .finale-letter {
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+            }
+        }
+
+        /* --- ORIENTASI LANDSCAPE --- */
+        @media (orientation: landscape) and (max-height: 500px) {
+            #intro-screen {
+                padding: 10px;
+            }
+            
+            .intro-title {
+                font-size: 2rem;
+                margin-bottom: 10px;
+            }
+            
+            .intro-subtitle {
+                font-size: 0.9rem;
+                margin-bottom: 20px;
+            }
+            
+            #explore-btn {
+                padding: 8px 20px;
+                font-size: 0.9rem;
+                min-height: 40px;
+            }
+            
+            .modal-content {
+                margin: 5% auto;
+                max-height: 90vh;
+            }
+            
+            #finale-screen {
+                padding: 20px;
+            }
+            
+            .finale-title {
+                font-size: 2rem;
+                margin-bottom: 15px;
+            }
+        }
+
+        /* --- SUPPORT UNTUK PERANGKAT SENTUH --- */
+        @media (hover: none) and (pointer: coarse) {
+            .surprise-point:hover {
+                transform: none;
+            }
+            
+            .surprise-point:active {
+                transform: scale(1.5);
+            }
+            
+            #music-control:hover {
+                transform: none;
+            }
+            
+            #music-control:active {
+                transform: scale(1.1);
+            }
+            
+            #explore-btn:hover {
+                transform: none;
+            }
+            
+            #explore-btn:active {
+                transform: scale(1.05);
+            }
         }
     </style>
 </head>
@@ -413,21 +624,49 @@
 
             const canvas = document.getElementById('particles-canvas');
             const ctx = canvas.getContext('2d');
-            canvas.width = window.innerWidth;
-            canvas.height = window.innerHeight;
+            
+            // Inisialisasi ukuran canvas
+            function initCanvas() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            initCanvas();
 
             let isMusicPlaying = false;
             let foundSurprises = 0;
             const totalSurprises = 5;
 
-            // --- DATA KEJUTAN ---
-            const surprises = [
-                { id: 1, top: '20%', left: '15%', type: 'image', src: 'image/ummi2.jpg', caption: 'Awal dari segalanya. Senyum yang mengubah dunianku.' },
-                { id: 2, top: '40%', left: '70%', type: 'quote', quote: '"Cinta tidak terlihat dengan mata, tetapi dengan hati."', message: '- Helen Keller -' },
-                { id: 3, top: '70%', left: '30%', type: 'image', src: 'image/dlas.jpg', caption: 'Melangkah bersama, menghadapi dunia.' },
-                { id: 4, top: '30%', left: '45%', type: 'image', src:'image/abi-ummi.jpeg',caption: 'Terima kasih sudah menjadi sahabat terbaik dan partner dalam kebaikan...' },
-                { id: 5, top: '60%', left: '80%', type: 'image', src: 'image/ummi1.png', caption: 'Dan sampai kini, kamulah rumahku.' }
-            ];
+            // --- DATA KEJUTAN (Disesuaikan untuk responsif) ---
+            const getSurprisePositions = () => {
+                const isMobile = window.innerWidth <= 768;
+                const isSmallScreen = window.innerWidth <= 480;
+                
+                if (isSmallScreen) {
+                    return [
+                        { id: 1, top: '25%', left: '20%', type: 'image', src: 'image/ummi2.jpg', caption: 'Awal dari segalanya. Senyum yang mengubah dunianku.' },
+                        { id: 2, top: '45%', left: '75%', type: 'quote', quote: '"Cinta tidak terlihat dengan mata, tetapi dengan hati."', message: '- Helen Keller -' },
+                        { id: 3, top: '65%', left: '25%', type: 'image', src: 'image/dlas.jpg', caption: 'Melangkah bersama, menghadapi dunia.' },
+                        { id: 4, top: '35%', left: '50%', type: 'image', src:'image/abi-ummi.jpeg',caption: 'Terima kasih sudah menjadi sahabat terbaik dan partner dalam kebaikan...' },
+                        { id: 5, top: '75%', left: '70%', type: 'image', src: 'image/ummi1.png', caption: 'Dan sampai kini, kamulah rumahku.' }
+                    ];
+                } else if (isMobile) {
+                    return [
+                        { id: 1, top: '20%', left: '20%', type: 'image', src: 'image/ummi2.jpg', caption: 'Awal dari segalanya. Senyum yang mengubah dunianku.' },
+                        { id: 2, top: '40%', left: '75%', type: 'quote', quote: '"Cinta tidak terlihat dengan mata, tetapi dengan hati."', message: '- Helen Keller -' },
+                        { id: 3, top: '65%', left: '30%', type: 'image', src: 'image/dlas.jpg', caption: 'Melangkah bersama, menghadapi dunia.' },
+                        { id: 4, top: '30%', left: '50%', type: 'image', src:'image/abi-ummi.jpeg',caption: 'Terima kasih sudah menjadi sahabat terbaik dan partner dalam kebaikan...' },
+                        { id: 5, top: '70%', left: '75%', type: 'image', src: 'image/ummi1.png', caption: 'Dan sampai kini, kamulah rumahku.' }
+                    ];
+                } else {
+                    return [
+                        { id: 1, top: '20%', left: '15%', type: 'image', src: 'image/ummi2.jpg', caption: 'Awal dari segalanya. Senyum yang mengubah dunianku.' },
+                        { id: 2, top: '40%', left: '70%', type: 'quote', quote: '"Cinta tidak terlihat dengan mata, tetapi dengan hati."', message: '- Helen Keller -' },
+                        { id: 3, top: '70%', left: '30%', type: 'image', src: 'image/dlas.jpg', caption: 'Melangkah bersama, menghadapi dunia.' },
+                        { id: 4, top: '30%', left: '45%', type: 'image', src:'image/abi-ummi.jpeg',caption: 'Terima kasih sudah menjadi sahabat terbaik dan partner dalam kebaikan...' },
+                        { id: 5, top: '60%', left: '80%', type: 'image', src: 'image/ummi1.png', caption: 'Dan sampai kini, kamulah rumahku.' }
+                    ];
+                }
+            };
 
             // --- SISTEM PARTIKEL ---
             class Particle {
@@ -455,23 +694,32 @@
                 }
             }
             
-            const particlesArray = []; 
-            for (let i = 0; i < 200; i++) particlesArray.push(new Particle());
+            let particlesArray = [];
+            
+            function initParticles() {
+                particlesArray = [];
+                const particleCount = window.innerWidth < 768 ? 100 : 200;
+                for (let i = 0; i < particleCount; i++) {
+                    particlesArray.push(new Particle());
+                }
+            }
             
             function animateParticles() { 
                 ctx.clearRect(0, 0, canvas.width, canvas.height); 
                 particlesArray.forEach(p => { p.update(); p.draw(); }); 
                 requestAnimationFrame(animateParticles); 
             }
+            
+            initParticles();
             animateParticles();
             
-            window.addEventListener('resize', () => { 
-                canvas.width = window.innerWidth; 
-                canvas.height = window.innerHeight; 
-            });
-
             // --- FUNGSI-FUNGSI ---
             function createSurprisePoints() {
+                // Hapus titik yang ada terlebih dahulu
+                const existingPoints = document.querySelectorAll('.surprise-point');
+                existingPoints.forEach(point => point.remove());
+                
+                const surprises = getSurprisePositions();
                 surprises.forEach(s => {
                     const point = document.createElement('div');
                     point.className = 'surprise-point';
@@ -479,11 +727,16 @@
                     point.style.top = s.top;
                     point.style.left = s.left;
                     point.addEventListener('click', () => openModal(s));
+                    point.addEventListener('touchstart', (e) => {
+                        e.preventDefault();
+                        openModal(s);
+                    }, { passive: false });
                     mainContent.appendChild(point);
                 });
             }
 
             function createHeartProgress() {
+                heartProgress.innerHTML = '';
                 for (let i = 0; i < totalSurprises; i++) {
                     const heart = document.createElement('span');
                     heart.className = 'heart-icon';
@@ -504,15 +757,17 @@
 
             function openModal(data) {
                 const point = document.querySelector(`.surprise-point[data-id="${data.id}"]`);
-                if (point.classList.contains('found')) return;
+                if (point && point.classList.contains('found')) return;
 
-                point.classList.add('found');
+                if (point) {
+                    point.classList.add('found');
+                }
                 foundSurprises++;
                 updateHeartProgress();
 
                 let content = '';
                 if (data.type === 'image') {
-                    content = `<img src="${data.src}" alt="Memory ${data.id}"><p>${data.caption}</p>`;
+                    content = `<img src="${data.src}" alt="Memory ${data.id}" loading="lazy"><p>${data.caption}</p>`;
                 } else if (data.type === 'quote') {
                     content = `<p class="modal-quote">${data.quote}</p><p>${data.message}</p>`;
                 } else if (data.type === 'message') {
@@ -522,22 +777,26 @@
                 modal.style.display = 'block';
                 
                 // Play a gentle sound when opening a memory
-                const memorySound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-happy-crowd-laugh-464.mp3');
-                memorySound.volume = 0.3;
-                memorySound.play().catch(e => console.log("Memory sound autoplay prevented."));
+                try {
+                    const memorySound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-happy-crowd-laugh-464.mp3');
+                    memorySound.volume = 0.3;
+                    memorySound.play().catch(e => console.log("Memory sound autoplay prevented."));
+                } catch (error) {
+                    console.log("Error playing memory sound:", error);
+                }
             }
 
             function showFinale() {
                 finaleScreen.style.display = 'flex';
                 
                 // Play celebration sound
-                const celebrationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
-                celebrationSound.volume = 0.5;
-                celebrationSound.play().catch(e => console.log("Celebration sound autoplay prevented."));
-                
-                // Optional: Change music for finale (uncomment if you have a special finale song)
-                // backgroundMusic.src = 'lagu_finale.mp3';
-                // backgroundMusic.play();
+                try {
+                    const celebrationSound = new Audio('https://assets.mixkit.co/sfx/preview/mixkit-achievement-bell-600.mp3');
+                    celebrationSound.volume = 0.5;
+                    celebrationSound.play().catch(e => console.log("Celebration sound autoplay prevented."));
+                } catch (error) {
+                    console.log("Error playing celebration sound:", error);
+                }
             }
 
             // --- MUSIC FUNCTIONS ---
@@ -590,8 +849,22 @@
                 }, 2000);
             });
 
-            closeModalBtn.addEventListener('click', () => modal.style.display = 'none');
-            window.addEventListener('click', (e) => { if (e.target == modal) modal.style.display = 'none'; });
+            // Event listener untuk tombol close modal
+            closeModalBtn.addEventListener('click', () => {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal ketika klik di luar modal
+            window.addEventListener('click', (e) => { 
+                if (e.target == modal) modal.style.display = 'none'; 
+            });
+            
+            // Close modal dengan escape key
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                }
+            });
 
             // Music control with volume slider
             let volumeSliderVisible = false;
@@ -613,7 +886,27 @@
                 isMusicPlaying = !isMusicPlaying;
             });
 
-            // Toggle volume slider
+            // Untuk perangkat sentuh, gunakan long press untuk volume slider
+            let longPressTimer;
+            musicControl.addEventListener('touchstart', (e) => {
+                e.preventDefault();
+                longPressTimer = setTimeout(() => {
+                    volumeSliderVisible = !volumeSliderVisible;
+                    volumeSlider.classList.toggle('show', volumeSliderVisible);
+                }, 500);
+            }, { passive: false });
+            
+            musicControl.addEventListener('touchend', (e) => {
+                e.preventDefault();
+                clearTimeout(longPressTimer);
+            }, { passive: false });
+            
+            musicControl.addEventListener('touchmove', (e) => {
+                e.preventDefault();
+                clearTimeout(longPressTimer);
+            }, { passive: false });
+
+            // Untuk desktop, gunakan right click
             musicControl.addEventListener('contextmenu', (e) => {
                 e.preventDefault();
                 volumeSliderVisible = !volumeSliderVisible;
@@ -627,6 +920,14 @@
                     volumeSlider.classList.remove('show');
                 }
             });
+            
+            // Untuk perangkat sentuh
+            document.addEventListener('touchstart', (e) => {
+                if (!musicControl.contains(e.target) && !volumeSlider.contains(e.target)) {
+                    volumeSliderVisible = false;
+                    volumeSlider.classList.remove('show');
+                }
+            }, { passive: true });
 
             // Setup audio on load
             setupAudio();
@@ -635,6 +936,52 @@
             setTimeout(() => {
                 backgroundMusic.load();
             }, 1000);
+
+            // --- RESPONSIVE ADJUSTMENTS ON RESIZE ---
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                clearTimeout(resizeTimeout);
+                resizeTimeout = setTimeout(() => {
+                    initCanvas();
+                    initParticles();
+                    createSurprisePoints();
+                    
+                    // Reposition modal jika terbuka
+                    if (modal.style.display === 'block') {
+                        modal.style.display = 'none';
+                        setTimeout(() => {
+                            modal.style.display = 'block';
+                        }, 10);
+                    }
+                }, 250);
+            });
+
+            // --- ORIENTATION CHANGE HANDLING ---
+            window.addEventListener('orientationchange', () => {
+                setTimeout(() => {
+                    initCanvas();
+                    initParticles();
+                    createSurprisePoints();
+                }, 500);
+            });
+
+            // --- TOUCH DEVICE OPTIMIZATIONS ---
+            if ('ontouchstart' in window) {
+                document.body.classList.add('touch-device');
+                
+                // Increase touch target sizes
+                const style = document.createElement('style');
+                style.textContent = `
+                    .surprise-point {
+                        min-width: 40px !important;
+                        min-height: 40px !important;
+                    }
+                    #explore-btn {
+                        min-height: 60px !important;
+                    }
+                `;
+                document.head.appendChild(style);
+            }
         });
     </script>
 </body>
