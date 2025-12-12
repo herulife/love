@@ -583,13 +583,13 @@
     <!-- GRAND FINALE SCREEN -->
     <section id="finale-screen">
         <h1 class="finale-title">Selamat Ulang Tahun Pernikahan, Sayangku</h1>
-	    <div class="finale-letter">
-			<p>Istriku Ratna Yestina,</p>
-			<p>Alhamdulillāh, segala puji bagi Allah yang telah mempersatukan kita dalam ikatan pernikahan yang penuh berkah. Terima kasih telah mendampingi perjalanan hidupku dengan kesabaran, cinta, dan ketulusan yang engkau persembahkan selama ini.</p>
-			<p>Sejak 14 Desember 2008 hingga hari ini, Allah menjaga dan menumbuhkan rasa ini agar tetap berada dalam kebaikan. Engkau adalah penyejuk hatiku sebagaimana Allah gambarkan pasangan yang saling menenangkan. Namamu selalu hadir dalam doa-doaku, semoga Allah menjaga dan memberkahi setiap langkahmu.</p>
-			<p>Aku mencintaimu karena Allah. Semoga rumah tangga kita selalu dinaungi rahmat, dijauhkan dari godaan, dipenuhi keberkahan, dan dipanjangkan hingga Allah mempertemukan kembali kita di surga-Nya kelak. Āmīn.</p>
-		</div>
-		<p class="finale-signature">Abi Heru Fidiyanto</p>
+        <div class="finale-letter">
+            <p>Istriku Ratna Yestina,</p>
+            <p>Alhamdulillāh, segala puji bagi Allah yang telah mempersatukan kita dalam ikatan pernikahan yang penuh berkah. Terima kasih telah mendampingi perjalanan hidupku dengan kesabaran, cinta, dan ketulusan yang engkau persembahkan selama ini.</p>
+            <p>Sejak 14 Desember 2008 hingga hari ini, Allah menjaga dan menumbuhkan rasa ini agar tetap berada dalam kebaikan. Engkau adalah penyejuk hatiku sebagaimana Allah gambarkan pasangan yang saling menenangkan. Namamu selalu hadir dalam doa-doaku, semoga Allah menjaga dan memberkahi setiap langkahmu.</p>
+            <p>Aku mencintaimu karena Allah. Semoga rumah tangga kita selalu dinaungi rahmat, dijauhkan dari godaan, dipenuhi keberkahan, dan dipanjangkan hingga Allah mempertemukan kembali kita di surga-Nya kelak. Āmīn.</p>
+        </div>
+        <p class="finale-signature">Abi Heru Fidiyanto</p>
     </section>
 
     <!-- KONTROL MUSIK -->
@@ -643,48 +643,135 @@
                 
                 if (isSmallScreen) {
                     return [
-							    { 
-							        id: 1, 
-							        top: '25%', 
-							        left: '20%', 
-							        type: 'image', 
-							        src: 'image/ummi2.jpg', 
-							        caption: 'Bismillah… dari sinilah Allah memulai kisah kita, dengan senyum yang menjadi penyejuk hati.' 
-							    },
-							    { 
-							        id: 2, 
-							        top: '45%', 
-							        left: '75%', 
-							        type: 'quote', 
-							        quote: '"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan agar kamu merasa tenteram kepadanya."', 
-							        message: '- QS. Ar-Rūm: 21 -' 
-							    },
-							    { 
-							        id: 3, 
-							        top: '65%', 
-							        left: '25%', 
-							        type: 'image', 
-							        src: 'image/dlas.jpg', 
-							        caption: 'Melangkah bersama dalam ridha Allah, saling menguatkan menuju kebaikan.' 
-							    },
-							    { 
-							        id: 4, 
-							        top: '35%', 
-							        left: '50%', 
-							        type: 'image',
-							        src:'image/abi-ummi.jpeg',
-							        caption: 'Terima kasih telah menjadi sahabat terbaik, penolong dalam kebaikan, dan amanah yang selalu kupanjatkan dalam doa.'
-							    },
-							    { 
-							        id: 5, 
-							        top: '75%', 
-							        left: '70%', 
-							        type: 'image', 
-							        src: 'image/ummi1.png', 
-							        caption: 'Dengan izin Allah, engkaulah tempat hatiku menemukan ketenangan dan pulang.' 
-							    }
-							];
-
+                        { 
+                            id: 1, 
+                            top: '25%', 
+                            left: '20%', 
+                            type: 'image', 
+                            src: 'image/ummi2.jpg', 
+                            caption: 'Bismillah… dari sinilah Allah memulai kisah kita, dengan senyum yang menjadi penyejuk hati.' 
+                        },
+                        { 
+                            id: 2, 
+                            top: '45%', 
+                            left: '75%', 
+                            type: 'quote', 
+                            quote: '"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan agar kamu merasa tenteram kepadanya."', 
+                            message: '- QS. Ar-Rūm: 21 -' 
+                        },
+                        { 
+                            id: 3, 
+                            top: '65%', 
+                            left: '25%', 
+                            type: 'image', 
+                            src: 'image/dlas.jpg', 
+                            caption: 'Melangkah bersama dalam ridha Allah, saling menguatkan menuju kebaikan.' 
+                        },
+                        { 
+                            id: 4, 
+                            top: '35%', 
+                            left: '50%', 
+                            type: 'image',
+                            src:'image/abi-ummi.jpeg',
+                            caption: 'Terima kasih telah menjadi sahabat terbaik, penolong dalam kebaikan, dan amanah yang selalu kupanjatkan dalam doa.'
+                        },
+                        { 
+                            id: 5, 
+                            top: '75%', 
+                            left: '70%', 
+                            type: 'image', 
+                            src: 'image/ummi1.png', 
+                            caption: 'Dengan izin Allah, engkaulah tempat hatiku menemukan ketenangan dan pulang.' 
+                        }
+                    ];
+                } else if (isMobile) {
+                    return [
+                        { 
+                            id: 1, 
+                            top: '20%', 
+                            left: '15%', 
+                            type: 'image', 
+                            src: 'image/ummi2.jpg', 
+                            caption: 'Bismillah… dari sinilah Allah memulai kisah kita, dengan senyum yang menjadi penyejuk hati.' 
+                        },
+                        { 
+                            id: 2, 
+                            top: '40%', 
+                            left: '80%', 
+                            type: 'quote', 
+                            quote: '"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan agar kamu merasa tenteram kepadanya."', 
+                            message: '- QS. Ar-Rūm: 21 -' 
+                        },
+                        { 
+                            id: 3, 
+                            top: '60%', 
+                            left: '20%', 
+                            type: 'image', 
+                            src: 'image/dlas.jpg', 
+                            caption: 'Melangkah bersama dalam ridha Allah, saling menguatkan menuju kebaikan.' 
+                        },
+                        { 
+                            id: 4, 
+                            top: '30%', 
+                            left: '50%', 
+                            type: 'image',
+                            src:'image/abi-ummi.jpeg',
+                            caption: 'Terima kasih telah menjadi sahabat terbaik, penolong dalam kebaikan, dan amanah yang selalu kupanjatkan dalam doa.'
+                        },
+                        { 
+                            id: 5, 
+                            top: '70%', 
+                            left: '65%', 
+                            type: 'image', 
+                            src: 'image/ummi1.png', 
+                            caption: 'Dengan izin Allah, engkaulah tempat hatiku menemukan ketenangan dan pulang.' 
+                        }
+                    ];
+                } else {
+                    return [
+                        { 
+                            id: 1, 
+                            top: '20%', 
+                            left: '10%', 
+                            type: 'image', 
+                            src: 'image/ummi2.jpg', 
+                            caption: 'Bismillah… dari sinilah Allah memulai kisah kita, dengan senyum yang menjadi penyejuk hati.' 
+                        },
+                        { 
+                            id: 2, 
+                            top: '35%', 
+                            left: '85%', 
+                            type: 'quote', 
+                            quote: '"Dan di antara tanda-tanda kekuasaan-Nya ialah Dia menciptakan untukmu pasangan agar kamu merasa tenteram kepadanya."', 
+                            message: '- QS. Ar-Rūm: 21 -' 
+                        },
+                        { 
+                            id: 3, 
+                            top: '55%', 
+                            left: '15%', 
+                            type: 'image', 
+                            src: 'image/dlas.jpg', 
+                            caption: 'Melangkah bersama dalam ridha Allah, saling menguatkan menuju kebaikan.' 
+                        },
+                        { 
+                            id: 4, 
+                            top: '25%', 
+                            left: '50%', 
+                            type: 'image',
+                            src:'image/abi-ummi.jpeg',
+                            caption: 'Terima kasih telah menjadi sahabat terbaik, penolong dalam kebaikan, dan amanah yang selalu kupanjatkan dalam doa.'
+                        },
+                        { 
+                            id: 5, 
+                            top: '65%', 
+                            left: '60%', 
+                            type: 'image', 
+                            src: 'image/ummi1.png', 
+                            caption: 'Dengan izin Allah, engkaulah tempat hatiku menemukan ketenangan dan pulang.' 
+                        }
+                    ];
+                }
+            };
 
             // --- SISTEM PARTIKEL ---
             class Particle {
@@ -769,7 +856,7 @@
                     hearts[foundSurprises - 1].classList.add('filled');
                 }
                 if (foundSurprises === totalSurprises) {
-                    setTimeout(showFinale, 1000);
+                    setTimeout(showFinale, 3000);
                 }
             }
 
